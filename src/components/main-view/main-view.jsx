@@ -4,6 +4,8 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import {Form, Button, Card, CardGroup, Container, Col, Row, CardBody } from 'react-bootstrap'; 
+
 
 export const MainView = () => {
 
@@ -28,7 +30,7 @@ export const MainView = () => {
                return {
                    _id: movie._id,
                    title: movie.title,
-                   imagePath: movie.imagePath,
+                   imagePath: movie.image,
                    description: movie.description,
                    releaseDate: movie.releaseDate,
                    genre: {
@@ -52,7 +54,7 @@ export const MainView = () => {
               setUser(user);
               setToken(token);
             }} />
-            or
+           Or
             <SignupView />
           </>
         );
@@ -79,14 +81,14 @@ export const MainView = () => {
           }}
         />
       ))}
-        <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
+        <Button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
     </div>
   );
 };
 
 MovieView.propTypes = {
   movie: PropTypes.shape({
-      imagePath: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       genre: PropTypes.shape({
           genreName: PropTypes.string.isRequired,
