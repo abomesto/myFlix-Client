@@ -4,18 +4,23 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, Router } from "react-router-dom";
 import {Form, Button, Card, CardGroup, Container, Col, Row, CardBody } from 'react-bootstrap'; 
 
 
 export const MainView = () => {
-
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
   const [user, setUser] = useState(storedUser? storedUser : null);
   const [token, setToken] = useState(storedToken? storedToken : null);
   const [movies, setMovies] = useState([]);
-
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const handleMovieClick = (movie) => {
+    // Handle the click event here
+    console.log('Movie clicked:', movie);
+
+  };
   useEffect(() => {
     if (!token) {
       return;
@@ -30,73 +35,104 @@ export const MainView = () => {
                return {
                    _id: movie._id,
                    title: movie.title,
-                   imagePath: movie.image,
+                   imagePath: movie?.image,
                    description: movie.description,
                    releaseDate: movie.releaseDate,
                    genre: {
-                       genreName: movie.genre.genreName,
-                       genreDescription: movie.genre.genreDescription,
+                       name: movie.genre.name,
+                       genreDescription: movie.genre.description,
                    },
                    director: {
-                       directorName: movie.director.directorName,
+                       directorName: movie.director.name,
                        birth: movie.director.birth,
                    },
                };
            });
-           setMovies(moviesFromApi);
+           setMovies(data);
        });
       }, [token]);
 
-      if (!user) {
-        return (
-          <>
-            <LoginView onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-            }} />
-           Or
-            <SignupView />
+      return (
+        
+        <BrowserRouter>
+     <NavigationBar
+        user={user}
+        onLoggedOut={() => {
+          setUser(null);
+        }}
+      />
+        <Row className="justify-content-md-center">
+          <Routes>
+            <Route path="/signup"
+            element={
+              <>
+          {user ? (
+            <Navigate to ="/"/>
+          ) : (
+            <Col md={5}>
+              <SignupView />
+            </Col>
+          )}
           </>
-        );
-      }
-      
-  if (selectedMovie) {
-    return (
-      <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
-    );
-  }
+            }
+            />
 
-  if (movies.length === 0) {
-    return <div>The list is empty!</div>;
-  }
-
-  return (
-    <div>
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          onMovieClick={(newSelectedMovie) => {
-            setSelectedMovie(newSelectedMovie);
-          }}
+            <Route 
+            path="/login"
+            element={
+              <>
+              {user?(
+              <Navigate to="/"/>
+             ) : ( 
+            <Col md={5}>
+              <LoginView onLoggedIn={(user) => setUser(user)} />
+            </Col>
+          )}
+         </>
+        }
         />
-      ))}
-        <Button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
-    </div>
-  );
-};
+          <Route path="/movies/:movieId"
+            element={
+            <>
+          {!user ? (
+         <Navigate to="/login"rplace
+         />
+         ) : movies.length === 0 ? (
+        <Col> The List is empty!</Col>
+        ) : (
+        <Col md={8}>
+        <MovieView movies={movies} />
+       
+        </Col>
+      )}
+    </>
+    }
+    />
+        <Route
+          path="/"
+          element={
+            <>
+            {!user ? (
+              <Navigate to ="/login" replace 
+              />
+            ) : movies.length === 0 ? (
+              <Col>The list is empty!</Col>
+            ) : (
+              <>
+              {movies.map((movie) => ( <Col className="mb-4" key={movie._id} md={3}>
+                <MovieCard movie={movie} onMovieClick={handleMovieClick} />
+                
+                </Col>
+              ))}
+              </>
+              )}
+              </>
+              }
+              />
+            </Routes>
 
-MovieView.propTypes = {
-  movie: PropTypes.shape({
-      image: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
-          genreName: PropTypes.string.isRequired,
-      }),
-      description: PropTypes.string.isRequired,
-      director: PropTypes.shape({
-          directorName: PropTypes.string.isRequired,
-      }),
-  }).isRequired,
-  onBackClick: PropTypes.func.isRequired,
-};
+          </Row>
+        
+        </BrowserRouter>
+      );
+    };

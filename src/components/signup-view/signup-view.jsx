@@ -40,7 +40,7 @@ export const SignupView = () => {
         <CardGroup>
         <Card>
             <CardBody>
-              <Card.Title> Or  Sign Up </Card.Title>
+              <Card.Title> Sign Up </Card.Title>
         <Form onSubmit={handleSubmit}>
           <Form.Group>
           <Form.Label>
@@ -62,7 +62,7 @@ export const SignupView = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength="8"
-          placeholder="Choose a Smart Password with 8 or mor Charcters"
+          placeholder="Choose a Smart Password with 8 or more Charcters"
         />
       </Form.Group>
 

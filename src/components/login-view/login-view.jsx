@@ -42,7 +42,7 @@ export const LoginView = ({ onLoggedIn }) => {
         <Col>
         <CardGroup>
           <Card>
-            <Card.Body>
+            <CardBody>
               <Card.Title>Login Please </Card.Title>
     <Form onSubmit={handleSubmit}>
       <Form.Group>
@@ -62,12 +62,12 @@ export const LoginView = ({ onLoggedIn }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          minLenght="8"
+          minLength="8"
         />
       </Form.Group>
       <Button type="submit">Submit</Button>
       </Form>
-      </Card.Body>
+      </CardBody>
       </Card>
         </CardGroup>
   </Col>
