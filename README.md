@@ -39,7 +39,6 @@ Iyas Movies is a website about the best movies according to Iyas Adi. Users can 
 
 - The application is a single-page application (SPA)
 - The application uses state routing to navigate between views and share URLs
-- The application gives users the option to filter movies using a “search” feature
 - The application uses Parcel as its build tool
 - The application is written using the React library and in ES2015+
 - The application uses Bootstrap as a UI library for styling and responsiveness
